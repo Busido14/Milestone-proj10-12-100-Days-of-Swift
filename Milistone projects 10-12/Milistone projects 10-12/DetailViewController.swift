@@ -10,22 +10,17 @@ import UIKit
 class DetailViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     
-    var selectedImage: Picture?
-    var imageContents: String?
-    var path: URL?
-    
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    var selectedImage: Image?
+        var imageContents: String?
+        var path: URL?
         
-        title = "Picture"
-        
-        if selectedImage != nil {
-            imageView.image = UIImage(contentsOfFile: path!.path)
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            if selectedImage != nil {
+                imageView.image = UIImage(contentsOfFile: path!.path)
+            }
         }
-
+        
 
     }
-    
-    
-}

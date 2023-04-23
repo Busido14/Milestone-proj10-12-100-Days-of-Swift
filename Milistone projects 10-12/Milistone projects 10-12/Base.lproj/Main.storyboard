@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Picture" id="aKM-D7-YNO">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Image" id="aKM-D7-YNO">
                                 <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aKM-D7-YNO" id="hul-Ad-9Ec">
@@ -40,22 +40,22 @@
         <!--Detail View Controller-->
         <scene sceneID="SJj-Bt-ggG">
             <objects>
-                <viewController storyboardIdentifier="Detail" id="X7y-st-1A4" customClass="DetailViewController" customModule="Milistone_projects_10_12" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailViewController" id="X7y-st-1A4" customClass="DetailViewController" customModule="Milistone_projects_10_12" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="u1t-Uv-ceG">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MxT-fd-gfb">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="16" y="59" width="361" height="759"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="O3c-tx-jy6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="MxT-fd-gfb" firstAttribute="top" secondItem="u1t-Uv-ceG" secondAttribute="topMargin" constant="-59" id="0VH-9N-2lO"/>
-                            <constraint firstItem="MxT-fd-gfb" firstAttribute="centerX" secondItem="u1t-Uv-ceG" secondAttribute="centerX" id="8Py-cY-kje"/>
-                            <constraint firstItem="MxT-fd-gfb" firstAttribute="centerY" secondItem="u1t-Uv-ceG" secondAttribute="centerY" id="Cdg-Qp-Odg"/>
-                            <constraint firstItem="MxT-fd-gfb" firstAttribute="leading" secondItem="O3c-tx-jy6" secondAttribute="leading" id="pYC-fo-OT6"/>
+                            <constraint firstItem="MxT-fd-gfb" firstAttribute="leading" secondItem="u1t-Uv-ceG" secondAttribute="leadingMargin" id="6Um-eU-msV"/>
+                            <constraint firstItem="MxT-fd-gfb" firstAttribute="trailing" secondItem="u1t-Uv-ceG" secondAttribute="trailingMargin" id="9Qc-qF-9o1"/>
+                            <constraint firstItem="MxT-fd-gfb" firstAttribute="top" secondItem="O3c-tx-jy6" secondAttribute="top" id="Owm-hM-A20"/>
+                            <constraint firstItem="MxT-fd-gfb" firstAttribute="bottom" secondItem="O3c-tx-jy6" secondAttribute="bottom" id="VHu-hi-xOw"/>
                         </constraints>
                     </view>
                     <connections>

@@ -8,36 +8,36 @@
 import UIKit
 
 class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    var pictures = [Picture]()
-    var imageDis: UIImage?
-    
 
+    var images = [Image]()
+    var imageToDisplay: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Added Foto or pictures"
-      
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPicture))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(addNewImage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPhoto))
         
         let defaults = UserDefaults.standard
-        if let savedPictures = defaults.object(forKey: "pictures") as? Data {
+        if let savedImages = defaults.object(forKey: "images") as? Data {
             let jsonDecoder = JSONDecoder()
+            
             do {
-                pictures = try jsonDecoder.decode([Picture].self, from: savedPictures)
+                images = try jsonDecoder.decode([Image].self, from: savedImages)
             } catch {
-                print("Failed to load pictures")
+                print("Failed to load images")
             }
         }
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pictures.count
+        return images.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Picture", for: indexPath)
-        let photo = pictures[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Image", for: indexPath)
+        let photo = images[indexPath.row]
         let path = getDocumentsDirectory().appendingPathComponent(photo.image)
         
         cell.textLabel?.text = photo.caption
@@ -46,61 +46,80 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photo = pictures[indexPath.row]
-        let path = getDocumentsDirectory().appendingPathExtension(photo.image)
-        let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+        let photo = images[indexPath.row]
+        let path = getDocumentsDirectory().appendingPathComponent(photo.image)
+        
+        let ac = UIAlertController(title: "Add Caption", message: nil, preferredStyle: .alert)
         ac.addTextField()
-        ac.addAction(UIAlertAction(title: "Add", style: .default, handler: {
+        ac.addAction(UIAlertAction(title: "Add Caption", style: .default, handler: {
             [weak self, weak ac] _ in
             guard let caption = ac?.textFields?[0].text else { return }
             photo.caption = caption
             self?.save()
             self?.tableView.reloadData()
         }))
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
-            vc.selectedImage = photo
-            vc.path = path
-            navigationController?.pushViewController(vc, animated: true)
-        }
-//        vc.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-//        present(vc, animated: true)
+        ac.addAction(UIAlertAction(title: "View", style: .default, handler: {
+            [weak self] _ in
+            if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController {
+                vc.selectedImage = photo
+                vc.path = path
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+        } ))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
     }
     
-    @objc func addPicture() {
+    @objc func addNewImage() {
+        let picker = UIImagePickerController()
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+        }
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    @objc func addNewPhoto() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
         picker.delegate = self
         present(picker, animated: true)
     }
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
+    
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let picture = info[.editedImage] as? UIImage else { return }
-        let pictureName = UUID().uuidString
-        let picturePath = getDocumentsDirectory().appendingPathComponent(pictureName)
+        guard let image = info[.editedImage] as? UIImage else { return }
         
-        if let jpegData = picture.jpegData(compressionQuality: 0.8) {
-            try? jpegData.write(to: picturePath)
+        let imageName = UUID().uuidString
+        let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
+        
+        if let jpegData = image.jpegData(compressionQuality: 0.8) {
+            try? jpegData.write(to: imagePath)
         }
-        let photo = Picture(image: pictureName, caption: "")
-        pictures.append(photo)
+        
+        let photo = Image(image: imageName, caption: "Enter caption...")
+        images.append(photo)
+        save()
         tableView.reloadData()
         dismiss(animated: true)
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return path[0]
     }
     
     func save() {
         let jsonEncoder = JSONEncoder()
         
-        if let savedData = try? jsonEncoder.encode(pictures) {
+        if let savedData = try? jsonEncoder.encode(images) {
             let defaults = UserDefaults.standard
-            defaults.set(savedData, forKey: "pictures")
+            defaults.set(savedData, forKey: "images")
         } else {
-            print("Failed to save pictures")
+            print("Failed to save images")
         }
     }
-    
+
 }
 

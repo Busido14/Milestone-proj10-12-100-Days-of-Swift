@@ -7,10 +7,10 @@
 
 import UIKit
 
-class Picture: NSObject, Codable {
+class Image: NSObject, Codable {
     var image = String()
     var caption = String()
-    
+
     init(image: String, caption: String) {
         self.image = image
         self.caption = caption
